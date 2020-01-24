@@ -3,39 +3,48 @@ import Quote from "./Quote";
 
 export default class QuoteSearcher extends Component {
   state = {
-    quotes: [
-      {
-        _id: "5d91b45d9980192a317c8acc",
-        quoteText:
-          "Notice that the stiffest tree is most easily cracked, while the bamboo or willow survives by bending with the wind.",
-        quoteAuthor: "Bruce Lee"
-      },
-      {
-        _id: "5d91b45d9980192a317c8abe",
-        quoteText:
-          "Give me six hours to chop down a tree and I will spend the first four sharpening the axe.",
-        quoteAuthor: "Abraham Lincoln"
-      },
-      {
-        _id: "5d91b45d9980192a317c8955",
-        quoteText:
-          "Good timber does not grow with ease; the stronger the wind, the stronger the trees.",
-        quoteAuthor: "J. Willard Marriott"
-      }
-    ]
+    fetching: true,
+    quotes: []
   };
-  render() {
-    const quotesList = this.state.quotes.map(quote => {
-      // console.log("quote?", quote);
-      return (
-        <Quote quoteText={quote.quoteText} quoteAuthor={quote.quoteAuthor} />
+
+  componentDidMount = async () => {
+    try {
+      const quoteData = await fetch(
+        "https://quote-garden.herokuapp.com/quotes/search/tree"
       );
-    });
+      const parsedQuoteData = await quoteData.json();
+      const quoteDataResult = parsedQuoteData.results;
+      this.setState({
+        fetching: false,
+        quotes: quoteDataResult
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  render() {
+    console.log("data arrived!", this.state.quotes);
+    const { quotes } = this.state;
+    const quotesList =
+      quotes &&
+      quotes.map(quote => {
+        // console.log("quote?", quote);
+        return (
+          <Quote quoteText={quote.quoteText} quoteAuthor={quote.quoteAuthor} />
+        );
+      });
 
     return (
       <div>
-        <h1>Quotes</h1>
-        {quotesList}
+        {this.state.fetching ? (
+          <div> Loading ...</div>
+        ) : (
+          <div>
+            <h1>Quotes</h1>
+            <div>{quotesList}</div>
+          </div>
+        )}
       </div>
     );
   }

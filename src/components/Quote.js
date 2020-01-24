@@ -2,11 +2,13 @@ import React, { Component } from "react";
 
 export default class Quote extends Component {
   render() {
+    const { quoteText, quoteAuthor } = this.props;
     return (
       <div>
-        <div>{this.props.quoteText}</div>
+        <div>{quoteText}</div>
         <br />
-        <div>By : {this.props.quoteAuthor}</div>
+        <div>By : {quoteAuthor}</div>
+        <br />
       </div>
     );
   }
