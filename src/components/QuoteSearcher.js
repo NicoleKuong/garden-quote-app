@@ -87,11 +87,20 @@ export default class QuoteSearcher extends Component {
           <KeywordSearch changeKeyword={this.changeKeyword} />
         </div>
         <br />
-        {this.state.fetching && "Loading..."}
-        <div>
-          Liked : {this.state.liked} / Disliked : {this.state.disliked}
-        </div>
 
+        {this.state.fetching && "Loading..."}
+
+        {!this.state.fetching && (
+          <h3>Quote found: {this.state.quotes.length}</h3>
+        )}
+
+        <h2>
+          Liked : {this.state.liked} / Disliked : {this.state.disliked}
+        </h2>
+
+        {!this.state.fetching && this.state.quotes.length === 0 && (
+          <h2>Cannot find any quotes!</h2>
+        )}
         <div>{quotesList}</div>
       </div>
     );
