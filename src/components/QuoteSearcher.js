@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Quote from "./Quote";
 import KeywordSearch from "./KeywordSearch";
+import AddOwnQuote from "./AddOwnQuote";
 
 export default class QuoteSearcher extends Component {
   state = {
@@ -41,6 +42,16 @@ export default class QuoteSearcher extends Component {
     });
   };
 
+  addQuote = (quoteText, quoteAuthor) => {
+    const updatedQuote = {
+      quoteAuthor: quoteAuthor,
+      quoteText: quoteText
+    };
+    this.setState({
+      quotes: this.state.quotes.concat(updatedQuote)
+    });
+  };
+
   setLiked = () => {
     this.setState({ liked: this.state.liked + 1 });
   };
@@ -59,7 +70,7 @@ export default class QuoteSearcher extends Component {
 
   render() {
     // console.log("data arrived!", this.state.quotes);
-    console.log(this.state);
+    // console.log(this.state);
     const { quotes } = this.state;
     const quotesList =
       quotes &&
@@ -81,7 +92,13 @@ export default class QuoteSearcher extends Component {
 
     return (
       <div>
-        <h1>Quotes</h1>
+        <h1>The Quote Machine</h1>
+
+        <div>
+          <h3>Add you own quote</h3>
+          <AddOwnQuote addQuote={this.addQuote} />
+        </div>
+        <br />
 
         <div>
           <KeywordSearch changeKeyword={this.changeKeyword} />

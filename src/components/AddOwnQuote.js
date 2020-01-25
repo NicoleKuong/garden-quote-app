@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 
-export default class KeywordSearch extends Component {
-  state = { keyword: "" };
+export default class AddOwnQuote extends Component {
+  state = {
+    quoteText: "",
+    quoteAuthor: "Nicole"
+  };
 
   handleSubmit = event => {
     event.preventDefault();
-    this.state.keyword && this.props.changeKeyword(this.state.keyword);
+    this.props.addQuote(this.state.quoteText, this.state.quoteAuthor);
   };
 
   handleChange = event => {
@@ -16,17 +19,16 @@ export default class KeywordSearch extends Component {
 
   render() {
     return (
-      <div className="searchQuote">
+      <div className="addOwnQuote">
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
-            name="keyword"
+            name="quoteText"
             onChange={this.handleChange}
-            value={this.state.keyword}
-            placeholder="Search by keyword"
+            value={this.state.quoteText}
+            placeholder="Submit your quote"
           />
-
-          <input type="submit" value="Search" />
+          <input type="submit" value="add quote"></input>
         </form>
       </div>
     );
