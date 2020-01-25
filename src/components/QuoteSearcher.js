@@ -1,18 +1,20 @@
 import React, { Component } from "react";
 import Quote from "./Quote";
+import KeywordSearch from "./KeywordSearch";
 
 export default class QuoteSearcher extends Component {
   state = {
     fetching: true,
     quotes: [],
     liked: 0,
-    disliked: 0
+    disliked: 0,
+    keyword: "tree"
   };
 
-  componentDidMount = async () => {
+  quoteSearch = async () => {
     try {
       const quoteData = await fetch(
-        "https://quote-garden.herokuapp.com/quotes/search/tree"
+        `https://quote-garden.herokuapp.com/quotes/search/${this.state.keyword}`
       );
       const parsedQuoteData = await quoteData.json();
       const quoteDataResult = parsedQuoteData.results;
@@ -29,6 +31,14 @@ export default class QuoteSearcher extends Component {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  componentDidMount = async () => this.quoteSearch();
+
+  changeKeyword = inputKeyword => {
+    this.setState({ keyword: inputKeyword, fetching: "loading..." }, () => {
+      this.quoteSearch();
+    });
   };
 
   setLiked = () => {
@@ -71,17 +81,18 @@ export default class QuoteSearcher extends Component {
 
     return (
       <div>
-        {this.state.fetching ? (
-          <div> Loading ...</div>
-        ) : (
-          <div>
-            <h1>Quotes</h1>
-            <div>
-              Liked : {this.state.liked} / Disliked : {this.state.disliked}
-            </div>
-            <div>{quotesList}</div>
-          </div>
-        )}
+        <h1>Quotes</h1>
+
+        <div>
+          <KeywordSearch changeKeyword={this.changeKeyword} />
+        </div>
+        <br />
+        {this.state.fetching && "Loading..."}
+        <div>
+          Liked : {this.state.liked} / Disliked : {this.state.disliked}
+        </div>
+
+        <div>{quotesList}</div>
       </div>
     );
   }
